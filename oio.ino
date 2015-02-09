@@ -5,6 +5,7 @@ int p2PadPin[4] = {9, 10, 11, 12};
 int neonPin = 13;
 
 byte pcData[4];
+byte crc;
 
 void readData(){
     for (int i=0;i<4;i++)
@@ -163,8 +164,12 @@ void loop(){
     // Wait for some serial data and store the 4 bytes we need
     while (!Serial.available()){}
     readData();
-    padLights();
-    sensorMode();        
-    //Tell the PC that it has completed it's task
-    Serial.write(0x11);      
+    // Lets compare the checksum to make sure we have correct data
+    crc = ((data[0] + data[1] + data[2] - 0x80) & 0xFF);
+    if (crc == data[3]) {
+        padLights();
+        sensorMode();        
+        //Tell the PC that it has completed it's task
+        Serial.write(0x11);
+    }   
 }
