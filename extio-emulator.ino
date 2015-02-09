@@ -5,9 +5,11 @@ int neonPin = 22;
 
 // bitmask for each bit in a byte
 unsigned char bitmask[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+// Word of clock data (1ms bit length)
+unsigned char clock_word = 0x07;
 
 unsigned char pcData[4];
-unsigned Char crc;
+unsigned char crc;
 
 void lights(unsigned char, unsigned char, unsigned char);
 void sensorMode(unsigned char);
@@ -73,7 +75,7 @@ void lights(unsigned char p1, unsigned char p2, unsigned char neon)
      * Left   0x10 (B00010000)
      * Right  0x08 (B00001000)
      */
-    for (int i = 0; x < 4; x++)
+    for (int i = 0; i < 4; i++)
     {
         digitalWrite(p1PadPin[i], p1 & bitmask[i + 1]);
         digitalWrite(p2PadPin[i], p2 & bitmask[i + 1]);
