@@ -94,7 +94,7 @@ void padLights(){
         lightsNeon = false; 
 
     // Now lets turn the lights on and off    
-    for (x=0;x<4;x++){
+    for (int x=0;x<4;x++){
         digitalWrite(p1PadPin[x], lightsP1[x]);
         digitalWrite(p2PadPin[x], lightsP2[x]);
     }
@@ -139,6 +139,7 @@ void sensorMode(){
             //padModeAll();
         default:
             break;
+	}
 }
 
 void init(){
@@ -165,8 +166,8 @@ void loop(){
     while (!Serial.available()){}
     readData();
     // Lets compare the checksum to make sure we have correct data
-    crc = ((data[0] + data[1] + data[2] - 0x80) & 0xFF);
-    if (crc == data[3]) {
+    crc = ((pcData[0] + pcData[1] + pcData[2]) & 0xFF);
+    if (crc == pcData[3] | (crc & 0x7F) == pcData[3]) {
         padLights();
         sensorMode();        
         //Tell the PC that it has completed it's task
