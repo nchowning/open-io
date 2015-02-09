@@ -85,7 +85,7 @@ void padLights(){
     else
         lightsP2[3] = false;
 
-    // Neon **************************
+    // Neon ****************************************
     if (dataNeon >= 0x40) {
         lightsNeon = true;
         dataNeon = (dataNeon - 0x40); 
