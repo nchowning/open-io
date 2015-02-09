@@ -1,5 +1,7 @@
-int testPin = 2;
-int fl5Pin = 3;
+int p1testPin = 2;
+int p1fl5Pin = 3;
+int p2testPin = 14;
+int p2fl5Pin = 15;
 int p1PadPin[4] = {5, 6, 7, 8};
 int p2PadPin[4] = {9, 10, 11, 12};
 int neonPin = 13;
@@ -152,10 +154,22 @@ void init(){
 
 void setup(){
     // Pad-IO outputs
-    pinMode(testPin, OUTPUT);
-    pinMode(fl5Pin, OUTPUT);
+    pinMode(p1testPin, OUTPUT);
+    pinMode(p1fl5Pin, OUTPUT);
+    pinMode(p2testPin, OUTPUT);
+    pinMode(p2fl5Pin, OUTPUT);
+
     // Main communication to the PC
     Serial.begin(38400);
+
+    // Pad light output
+    for(int i=0; i<sizeof(p1PadPin); i++){
+	pinMode(p1PadPin[i], OUTPUT);
+        pinMode(p2PadPin[i], OUTPUT);
+    }
+    // Neon output
+    pinMode(neonPin, OUTPUT);
+
 
     // Wait for the PC to send its first request
     init(); 
