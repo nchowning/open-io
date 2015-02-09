@@ -136,7 +136,7 @@ void sensorMode(){
         case 0x08:
             //All Sensors
             //padModeAll();
-        default
+        default:
             break;
 }
 
