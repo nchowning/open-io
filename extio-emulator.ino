@@ -148,54 +148,34 @@ void writeByte(unsigned char byte)
     }
 }
 
+/*
+ *  TODO: Figure out when it switches between default off and new mode
+ */
+
 void switchSensorUp()
 {
-    writeByte(0xD7);
-    writeByte(0x5F);
-    writeByte(0x75);
-    writeByte(0xFD);
-    writeByte(0xFD);
-    writeByte(0xFD);
-    writeByte(0xFD);
-    writeByte(0x55);
-    writeByte(0x56);
+    unsigned char bytes[] = {0xD7, 0x5F, 0x75, 0xFD, 0xFD, 0xFD, 0xFD, 0x55, 0x56};
+    for (int i; i<sizeof(bytes); i++)
+        writeByte(bytes[i]);
 }
 
 void switchSensorDown()
 {
-    writeByte(0xD7);
-    writeByte(0x5F);
-    writeByte(0x77);
-    writeByte(0x7F);
-    writeByte(0x7F);
-    writeByte(0x7F);
-    writeByte(0x7D);
-    writeByte(0x55);
-    writeByte(0x56);
+    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0x7F, 0x7F, 0x7F, 0x7D, 0x55, 0x56};
+    for (int i; i<sizeof(bytes); i++)
+        writeByte(bytes[i]);
 }
 
 void switchSensorLeft()
 {
-    writeByte(0xD7);
-    writeByte(0x5F);
-    writeByte(0x77);
-    writeByte(0xDF);
-    writeByte(0xDF);
-    writeByte(0xDF);
-    writeByte(0xDD);
-    writeByte(0x55);
-    writeByte(0x56);
+    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xDF, 0xDF, 0xDF, 0xDD, 0x55, 0x56};
+    for (int i; i<sizeof(bytes); i++)
+        writeByte(bytes[i]);
 }
 
 void switchSensorRight()
 {
-    writeByte(0xD7);
-    writeByte(0x5F);
-    writeByte(0x77);
-    writeByte(0xF7);
-    writeByte(0xF7);
-    writeByte(0xF7);
-    writeByte(0xFD);
-    writeByte(0x55);
-    writeByte(0x56);
+    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xF7, 0xF7, 0xF7, 0xFD, 0x55, 0x56};
+    for (int i; i<sizeof(bytes); i++)
+        writeByte(bytes[i]);
 }
