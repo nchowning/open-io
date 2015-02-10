@@ -43,10 +43,11 @@ void setup()
 void loop()
 {
     // Wait for some serial data and store the 4 bytes we need
-    while (!Serial.available()){}
     for (int i = 0; i < 4; i++)
+    {
+        while (!Serial.available()){}
         pcData[i] = Serial.read();
-
+    }
     // Compare the checksum to make sure we have correct data
     crc = ((pcData[0] + pcData[1] + pcData[2]) & 0xFF);
     if (crc == pcData[3] || (crc & 0x7F) == pcData[3])
