@@ -35,8 +35,9 @@ void setup()
     Serial.begin(38400);
 
     // The EXT-IO spams 0x22 until it gets something from the PC/Python2
-    while (!Serial.available())
-        Serial.write(0x22);
+    // FIXME: This may not be needed
+    //while (!Serial.available())
+    //    Serial.write(0x22);
 }
 
 void loop()
