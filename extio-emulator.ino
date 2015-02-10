@@ -126,18 +126,14 @@ void writeByte(unsigned char byte)
     for (int i = 0; i< 16; i++)
     {
         // Write the clock bit
-        if (clock_word & bitmask[clock_count + 4])
-            digitalWrite(2, HIGH);
-        else
-            digitalWrite(2, LOW);
+        digitalWrite(p1PadPin[4], clock_word & bitmask[clock_count + 4]);
+        digitalWrite(p2PadPin[4], clock_word & bitmask[clock_count + 4]);
 
         // Should the data bit be updated in this ms?
         if (i % 2 == 0)
         {
-            if (byte & bitmask[i / 2])
-                digitalWrite(3, HIGH);
-            else
-                digitalWrite(3, LOW);
+            digitalWrite(p1PadPin[5], byte & bitmask[i / 2]);
+            digitalWrite(p2PadPin[5], byte & bitmask[i / 2]);
         }
 
         // Delay for a millisecond
