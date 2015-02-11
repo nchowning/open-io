@@ -20,6 +20,7 @@ To install the Open-IO, we first need to identify a few connectors inside of you
 
 **Pad Connectors**
 There are 2 pad connectors (P1 - White; P2 - Orange) that each have 7 cables.
+
 Pin Name    | JP Cab Color | Kor Cab Color
 ----------- | ------------ | -------------
 Ground      | Black        | Black
@@ -35,6 +36,7 @@ There is a Neon light connector (White) that has 2 cables (Red & Black).
 
 **Serial Communication Connector**
 Lastly we need to identify the serial communication cable from your BemaniPC or Python2. This connector has 3 cables.
+
 Pin Name | Color
 -------- | -----
 GND      | Black
