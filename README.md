@@ -26,10 +26,10 @@ Pin Name    | JP Cab Color | Kor Cab Color
 ----------- | ------------ | -------------
 Ground      | Black        | Black
 FL1         | Green        | Blue
-FL1         | Blue         | Green
-FL1         | Purple       | Yellow
-FL1         | Grey         | Orange
-FL1         | White        | Red
+FL2         | Blue         | Green
+FL3         | Purple       | Yellow
+FL4         | Grey         | Orange
+FL5         | White        | Red
 TEST        | Brown        | Brown
 
 **Neon Connector**
@@ -38,7 +38,7 @@ There is a Neon light connector (White) that has 2 cables (Red & Black).
 
 **Serial Communication Connector**
 
-Lastly we need to identify the serial communication cable from your BemaniPC or Python2. This connector has 3 cables.
+Lastly we need to identify the serial communication cable from COM1 on your BemaniPC or Python2. This connector has 3 cables.
 
 Pin Name | Color
 -------- | -----
