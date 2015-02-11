@@ -26,6 +26,19 @@ void setup()
     {
         pinMode(p1PadPin[i], OUTPUT);
         pinMode(p2PadPin[i], OUTPUT);
+
+        // Set the lights to be on at the beginning
+        for (int i = 0; i < 4; i++)
+        {
+            digitalWrite(p1PadPin[i], HIGH);
+            digitalWrite(p2PadPin[i], HIGH);
+        }
+
+        // FL5 should be LOW and TEST should be HIGH by default
+        digitalWrite(p1PadPin[4], LOW);
+        digitalWrite(p1PadPin[5], HIGH);
+        digitalWrite(p2PadPin[4], LOW);
+        digitalWrite(p2PadPin[5], HIGH);
     }
 
     // Neon light output
@@ -33,11 +46,6 @@ void setup()
 
     // Main communication to bemaniPC or python2
     Serial.begin(38400);
-
-    // The EXT-IO spams 0x22 until it gets something from the PC/Python2
-    // FIXME: This may not be needed
-    //while (!Serial.available())
-    //    Serial.write(0x22);
 }
 
 void loop()
@@ -63,6 +71,7 @@ void loop()
     }
     else
     {
+        // TODO figure out how to "gracefully" fail
         // We have a problem
     }
 }
@@ -79,33 +88,33 @@ void lights(unsigned char p1, unsigned char p2, unsigned char neon)
      */
     for (int i = 0; i < 4; i++)
     {
-        digitalWrite(p1PadPin[i], p1 & bitmask[i + 1]);
-        digitalWrite(p2PadPin[i], p2 & bitmask[i + 1]);
+        digitalWrite(p1PadPin[i], !(p1 & bitmask[i + 1]));
+        digitalWrite(p2PadPin[i], !(p2 & bitmask[i + 1]));
     }
 
     /*
      * In the neon data, 0x40 (B01000000) enables or disables neon lights
      */
-    digitalWrite(neonPin, neon & bitmask[1]);
+    digitalWrite(neonPin, !(neon & bitmask[1]));
 }
 
 void sensorMode(unsigned char sensor)
 {
     switch (sensor)
     {
-        case 0x28:
+        case 0x10:
             // Up Sensor
             switchSensorUp();
             break;
-        case 0x20:
+        case 0x18:
             // Down Sensor
             switchSensorDown();
             break;
-        case 0x18:
+        case 0x20:
             // Left Sensor
             switchSensorLeft();
             break;
-        case 0x10:
+        case 0x28:
             // Right Sensor
             switchSensorRight();
             break;
@@ -127,15 +136,16 @@ void writeByte(unsigned char byte)
      */
     for (int i = 0; i< 16; i++)
     {
-        // Write the clock bit
-        digitalWrite(p1PadPin[4], clock_word & bitmask[clock_count + 4]);
-        digitalWrite(p2PadPin[4], clock_word & bitmask[clock_count + 4]);
+        // Write the clock bit to TEST pin
+        digitalWrite(p1PadPin[5], clock_word & bitmask[clock_count + 4]);
+        digitalWrite(p2PadPin[5], clock_word & bitmask[clock_count + 4]);
 
         // Should the data bit be updated in this ms?
         if (i % 2 == 0)
         {
-            digitalWrite(p1PadPin[5], byte & bitmask[i / 2]);
-            digitalWrite(p2PadPin[5], byte & bitmask[i / 2]);
+            // Write the data bit to the FL5 pin
+            digitalWrite(p1PadPin[4], byte & bitmask[i / 2]);
+            digitalWrite(p2PadPin[4], byte & bitmask[i / 2]);
         }
 
         // Delay for a millisecond
@@ -155,27 +165,32 @@ void writeByte(unsigned char byte)
 void switchSensorUp()
 {
     unsigned char bytes[] = {0xD7, 0x5F, 0x75, 0xFD, 0xFD, 0xFD, 0xFD, 0x55, 0x56};
-    for (int i; i<sizeof(bytes); i++)
+    for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorDown()
 {
     unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0x7F, 0x7F, 0x7F, 0x7D, 0x55, 0x56};
-    for (int i; i<sizeof(bytes); i++)
+    for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorLeft()
 {
     unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xDF, 0xDF, 0xDF, 0xDD, 0x55, 0x56};
-    for (int i; i<sizeof(bytes); i++)
+    for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorRight()
 {
     unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xF7, 0xF7, 0xF7, 0xFD, 0x55, 0x56};
-    for (int i; i<sizeof(bytes); i++)
+    for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
+}
+
+void switchSensorAll()
+{
+    // TODO figure this one out
 }
