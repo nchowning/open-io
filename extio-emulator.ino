@@ -30,8 +30,8 @@ void setup()
         // Set the lights to be on at the beginning
         for (int i = 0; i < 4; i++)
         {
-            digitalWrite(p1PadPin[i], HIGH);
-            digitalWrite(p2PadPin[i], HIGH);
+            digitalWrite(p1PadPin[i], LOW);
+            digitalWrite(p2PadPin[i], LOW);
         }
 
         // FL5 should be LOW and TEST should be HIGH by default
