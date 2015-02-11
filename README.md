@@ -9,6 +9,7 @@ A drop-in replacement for the EXT-IO. If you're not sure what the EXT-IO is, you
 > - Arduino Mega 2560
 > - Max232 - To convert rs232 12v from BemaniPC/Python 2 to 5v for Arduino
 > - Hookup pins/wires
+> - 5v power source for Arduino
 
 ---
 
@@ -62,6 +63,7 @@ Arduino Pin | Destination
 12          | P2 FL5
 13          | P2 TEST
 22          | Neon Red
+5v          | Max232 5v
 GND         | P1 GND
 GND         | P2 GND
 GND         | Neon GND
@@ -78,3 +80,5 @@ Max232 Pin | db9 Pin | Serial Data Connector Pin
 RX         | 2       | RX
 TX         | 3       | TX
 GND        | 5       | GND
+
+You'll also need a 5v power source inside of the cabinet for your Arduino.
