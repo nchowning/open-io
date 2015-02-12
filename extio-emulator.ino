@@ -18,6 +18,7 @@ void switchSensorUp();
 void switchSensorDown();
 void switchSensorLeft();
 void switchSensorRight();
+void switchSensorAll();
 
 void setup()
 {
@@ -45,7 +46,7 @@ void setup()
     pinMode(neonPin, OUTPUT);
 
     // Main communication to bemaniPC or python2
-    Serial.begin(38400);
+    Serial2.begin(38400);
 }
 
 void loop()
@@ -53,8 +54,8 @@ void loop()
     // Wait for some serial data and store the 4 bytes we need
     for (int i = 0; i < 4; i++)
     {
-        while (!Serial.available()){}
-        pcData[i] = Serial.read();
+        while (!Serial2.available()){}
+        pcData[i] = Serial2.read();
     }
     // Compare the checksum to make sure we have correct data
     crc = ((pcData[0] + pcData[1] + pcData[2]) & 0xFF);
@@ -67,7 +68,7 @@ void loop()
         sensorMode(pcData[2] & 0x3F);
 
         // Tell the PC/Python2 that we've completed our tas
-        Serial.write(0x11);
+        Serial2.write(0x11);
     }
     else
     {
@@ -120,6 +121,7 @@ void sensorMode(unsigned char sensor)
             break;
         case 0x08:
             // All Sensors
+            switchSensorAll();
             break;
     }
 }
@@ -164,33 +166,35 @@ void writeByte(unsigned char byte)
 
 void switchSensorUp()
 {
-    unsigned char bytes[] = {0xD7, 0x5F, 0x75, 0xFD, 0xFD, 0xFD, 0xFD, 0x55, 0x56};
+    unsigned char bytes[] = {0x35, 0xD7, 0xDD, 0x7F, 0x7F, 0x7F, 0x7F, 0x55, 0x55, 0x80};
     for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorDown()
 {
-    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0x7F, 0x7F, 0x7F, 0x7D, 0x55, 0x56};
+    unsigned char bytes[] = {0x35, 0xD7, 0xDD, 0xDF, 0xDF, 0xDF, 0xDF, 0xD5, 0x55, 0x80};
     for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorLeft()
 {
-    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xDF, 0xDF, 0xDF, 0xDD, 0x55, 0x56};
+    unsigned char bytes[] = {0x35, 0xD7, 0xDD, 0xF7, 0xF7, 0xF7, 0xF7, 0xD5, 0x55, 0x80};
     for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorRight()
 {
-    unsigned char bytes[] = {0xD7, 0x5F, 0x77, 0xF7, 0xF7, 0xF7, 0xFD, 0x55, 0x56};
+    unsigned char bytes[] = {0x35, 0xD7, 0xDD, 0xFD, 0xFD, 0xFD, 0xFD, 0xD5, 0x55, 0x80};
     for (int i; i < sizeof(bytes); i++)
         writeByte(bytes[i]);
 }
 
 void switchSensorAll()
 {
-    // TODO figure this one out
+    unsigned char bytes[] = {0x35, 0xD7, 0xDD, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x80};
+    for (int i; i < sizeof(bytes); i++)
+        writeByte(bytes[i]);
 }
