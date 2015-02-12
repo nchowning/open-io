@@ -40,8 +40,7 @@ The checksum is in the fourth byte, determined by adding the first three bytes a
 
 0xA0 0x28 0x50 0x78
 
-Here we can see that the PC wants to have the up arrow on for P1 (0x80 + 0x40), P2 down and right (0x20 + 0x08), Neons on and setting the pad IO to "up sensor" mode (0x40 + 0x10), and giving a calculated checksum ((0xA0 + 0x28 + 0x50) & 0x7F)
-
+Here we can see that the PC wants to have the down arrow on for P1 (0x80 + 0x20), P2 down and right (0x20 + 0x08), Neons on and setting the pad IO to "up sensor" mode (0x40 + 0x10), and giving a calculated checksum ((0xA0 + 0x28 + 0x50) & 0x7F). Once the EXTIO finishes it's task, it will respond simply with 0x11 to basically say "OK".
 
 
 
