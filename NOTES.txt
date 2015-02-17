@@ -13,6 +13,10 @@ PC <-------> EXT-IO
 |               |
 Pad-IO <---------
 
+-------------------------------------------
+PC Communication
+-------------------------------------------
+
 The Python2 or BemaniPC (either which I will refer to as PC) communicates with the EXT-IO over COM1 on the PC using standard RS232 serial at a baud rate of 38400. The data can be split up into 4 bytes:
 
 (0x80 + P1 lights)   (P2 lights)  (Neons + sensor mode)   (chksum)
@@ -42,7 +46,9 @@ The checksum is in the fourth byte, determined by adding the first three bytes a
 
 Here we can see that the PC wants to have the down arrow on for P1 (0x80 + 0x20), P2 down and right (0x20 + 0x08), Neons on and setting the pad IO to "up sensor" mode (0x40 + 0x10), and giving a calculated checksum ((0xA0 + 0x28 + 0x50) & 0x7F). Once the EXTIO finishes it's task, it will respond simply with 0x11 to basically say "OK".
 
-
+-----------------------------------------------
+Pad-IO Communication
+-----------------------------------------------
 
 The Pad-IO and the EXT-IO communicate with each other using a very slow inverted serial protocol over the FL5, Test, Up, and Right pins from the Pad-IO. The actual data being sent is on the FL5 pin and Right pin while the Test and Up pins are generally used as "clocks" which send consistent pulses. Test is initially set to high while FL5 is set to low. Up and Right are both low as well.
 
@@ -100,3 +106,18 @@ As you can see, the "down" bit pair has been activated. With this knowledge, we 
 
 The last three bytes meanings are still to be determined. It will end as 0xD5/0x55 0x55 0x80. To return to the example, we would send:
 35 D7 DD 5D F5 DF 7F 5(D)5 55 80
+
+
+-----------------------------------------
+Hookups
+-----------------------------------------
+
+The EXTIO hooks up to PC via various standard XH JST plugs that can be found at various locations including digikey or direct from JST:
+
+P1 Pad     XHB-10 --------- B10B-XH-A(LF)(SN)
+P2 Pad     XHB-12 --------- B12B-XH-A(LF)(SN)
+Neon       XHB-6 ---------- B6B-XH-A(LF)(SN)
+Serial     XHB-3 ---------- B3B-XH-A(LF)(SN)
+JAMMA U/R  XHB-5 ---------- B5B-XH-A(LF)(SN)
+
+The open-io project currently does not use the JAMMA up and right plug as that is used by the Pad-IO to communicate back to the EXTIO. We have determined that this was an unneccessary step in the communication process and have excluded it from our build.
