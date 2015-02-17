@@ -6,7 +6,7 @@ NOTE2: This is still a work in progress. There is still a lot to be learned abou
 ------------------------------------
 
 
-PC <-------> EXT-IO
+PC <-------> EXTIO
 ^             ^ |
 |             | |
 +-------------- |
@@ -17,7 +17,7 @@ Pad-IO <---------
 PC Communication
 -------------------------------------------
 
-The Python2 or BemaniPC (either which I will refer to as PC) communicates with the EXT-IO over COM1 on the PC using standard RS232 serial at a baud rate of 38400. The data can be split up into 4 bytes:
+The Python2 or BemaniPC (either which I will refer to as PC) communicates with the EXTIO over COM1 on the PC using standard RS232 serial at a baud rate of 38400. The data can be split up into 4 bytes:
 
 (0x80 + P1 lights)   (P2 lights)  (Neons + sensor mode)   (chksum)
 
@@ -50,7 +50,7 @@ Here we can see that the PC wants to have the down arrow on for P1 (0x80 + 0x20)
 Pad-IO Communication
 -----------------------------------------------
 
-The Pad-IO and the EXT-IO communicate with each other using a very slow inverted serial protocol over the FL5, Test, Up, and Right pins from the Pad-IO. The actual data being sent is on the FL5 pin and Right pin while the Test and Up pins are generally used as "clocks" which send consistent pulses. Test is initially set to high while FL5 is set to low. Up and Right are both low as well.
+The Pad-IO and the EXTIO communicate with each other using a very slow inverted serial protocol over the FL5, Test, Up, and Right pins from the Pad-IO. The actual data being sent is on the FL5 pin and Right pin while the Test and Up pins are generally used as "clocks" which send consistent pulses. Test is initially set to high while FL5 is set to low. Up and Right are both low as well.
 
 +----------+          +----------+  
 |          |  Test    |          |
@@ -78,13 +78,13 @@ With that set, a data signal is sent through FL5 using a 2ms bit length. Using t
 
 The signal starts with a header of 0x35, 0xD7, 0xDD. At the same time, the Pad-IO responds with the inverse of this signal on both up and right (0xCA, 0x28, 0x22). Right now, it is theorized that the EXTIO has a "3 strike" rule where if it does not receive the Pad-IO response within that three byte header, it will default to sending an "all sensor" mode signal and error out. We still need to listen in on how the EXTIO responds to the PC if a check fails.
 
-After the header, the EXTIO will start to send to the Pad-IO the actual data regarding the sensor mode. This data can be broken up into 4 bytes, one for each arrow (up, down, left right). Every even bit will determine the whether the sensor should actually be read. Here is an example of the mode data for down sensor:
+After the header, the EXTIO will start to send actual sensor mode data to the Pad-IO. This data can be broken up into 4 bytes, one for each arrow (up, down, left right). Every other bit will determine whether the sensor should actually be read. Here is an example of the mode data that would only activate the down sensor:
 
    Up      Down     Left     Right
   0xDF     0xDF     0xDF     0xDF
 11011111 11011111 11011111 11011111
 
-This can be broken up into 2 bit sections which determines which sensor to activate
+This can be broken up into 2 bit sections that determine which sensor(s) to activate
 
     0xDF
 11 01 11 11
@@ -95,7 +95,7 @@ Since the Pad-IO uses hex inverters, this data can be interpreted as so:
 00 10 00 00
 U  D  L  R
 
-As you can see, the "down" bit pair has been activated. With this knowledge, we were able to determine that you can use a combination of these bit pairs to activate any sets of sensors. As an example, we can set the up arrow to read up down and right sensors, the down arrow left and right sensors, the left arrow down sensor, and right arrow up sensor:
+As you can see, the "down" bit pair has been activated. With this knowledge, we were able to determine that you can use a combination of these bit pairs to activate any sensors on any arrows. As an example, we can set the up arrow to read up down and right sensors, the down arrow left and right sensors, the left arrow down sensor, and right arrow up sensor:
 
     Up             Down           Left           Right
 10 10 00 10    00 00 10 10    00 10 00 00     10 00 00 00 
@@ -104,7 +104,7 @@ As you can see, the "down" bit pair has been activated. With this knowledge, we 
      v              v              v               v
     0x5D           0xF5           0xDF            0x7F
 
-The last three bytes meanings are still to be determined. It will end as 0xD5/0x55 0x55 0x80. To return to the example, we would send:
+The last three bytes meanings are still to be determined. It will end as 0xD5/0x55 0x55 0x80. To return to the previous example, we would send:
 35 D7 DD 5D F5 DF 7F 5(D)5 55 80
 
 
@@ -120,4 +120,4 @@ Neon       XHB-6 ---------- B6B-XH-A(LF)(SN)
 Serial     XHB-3 ---------- B3B-XH-A(LF)(SN)
 JAMMA U/R  XHB-5 ---------- B5B-XH-A(LF)(SN)
 
-The open-io project currently does not use the JAMMA up and right plug as that is used by the Pad-IO to communicate back to the EXTIO. We have determined that this was an unneccessary step in the communication process and have excluded it from our build.
+The P1/P2 JAMMA up/right connector is used by the Pad-IO to send data back to the EXTIO. The open-io project does not currently use this connector as we're assuming that the Pad-IO will respond to EXTIO requests properly.
