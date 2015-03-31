@@ -1,6 +1,6 @@
 // FL1, FL2, FL3, FL4, FL5, TEST
-int p1PadPin[6] = {2, 3, 4, 5, 6, 7};
-int p2PadPin[6] = {8, 9, 10, 11, 12, 13};
+int p1PadPin[6] = {13, 12, 11, 10, 9, 8};
+int p2PadPin[6] = {7, 6, 5, 4, 3, 2};
 int neonPin = 22;
 
 // bitmask for each bit in a byte

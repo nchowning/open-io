@@ -53,20 +53,20 @@ Connect your Arduino using this pin-out:
 
 Arduino Pin | Destination
 ----------- | -----------
-0           | RX on TTL side of Max232
-1           | TX on TTL side of Max232
-2           | P1 FL1
-3           | P1 FL2
-4           | P1 FL3
-5           | P1 FL4
-6           | P1 FL5
-7           | P1 TEST
-8           | P2 FL1
-9           | P2 FL2
-10          | P2 FL3
-11          | P2 FL4
-12          | P2 FL5
-13          | P2 TEST
+2			| P2 TEST
+3			| P2 FL5
+4			| P2 FL4
+5			| P2 FL3
+6			| P2 FL2
+7			| P2 FL1
+8			| P1 TEST
+9			| P1 FL5
+10			| P1 FL4
+11			| P1 FL3
+12			| P1 FL2
+13			| P1 FL1
+16			| RX on TTL side of Max232
+17			| TX on TTL side of Max232
 22          | Neon Red
 5v          | Max232 5v
 GND         | P1 GND
